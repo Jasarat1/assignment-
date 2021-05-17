@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>SpaceX Launch | Jasarat Amin</title>
+</head>
+
+<body class="bg-light">
+    <h1>SpaceX Launch Program!</h1>
+    <script>
+        fetch('https://api.spacexdata.com/v3/launches?limit=100&launch_success=true&land_success=true&launch_year=2014')
+            .then(response => response.json())
+            .then(data => console.log(data));
+        //   .then(data => {console.log(JSON.parse(data).name)
+        //   });
+
+        fetch('https://api.spaceXdata.com/v3/launches?limit=100')
+            .then(function (response) {
+                return response.json();
+
+            })
+            .then(function (data) {
+                appendData(data);
+                appendfilter1(data);
+                appendfilter2(data);
+            })
+            .catch(function (err) {
+                console.log('error: ' + err);
+            });
+        function appendData(data) {
+            var mainContainer = document.getElementById("myData");
+            for (var i = 0; i < data.length; i++) {
+
+                var div = document.createElement("div");
+                var div2 = document.createElement("div");
+                var div3 = document.createElement("div");
+                var dp = document.createElement("img");
+                var p1 = document.createElement("p");
+                var p2 = document.createElement("p");
+                var p3 = document.createElement("p");
+                var p4 = document.createElement("p");
+                var p5 = document.createElement("p");
+
+
+                dp.className = "card-img-top bg-light";
+                dp.src = data[i].links.mission_patch;
+
+                p1.className = "text-info font-weight-bold"
+                div.className = "col-lg-3 col-md-6 col-12 mb-3 filterDiv show" + ' ' + data[i].launch_year;
+                div2.className = "card p-2";
+
+
+                div3.className = "card-body px-1";
+
+
+                p1.innerHTML = data[i].mission_name + ' ' + '#' + data[i].flight_number;
+                p2.innerHTML = '<span class="font-weight-bold">' + 'Mission ID:' + ' </span>' + ' ' + '<span class="text-info"></br>' + data[i].mission_id + ' </span>';
+                p3.innerHTML = '<span class="font-weight-bold">' + 'Launch Year:' + ' ' + '<span class="text-info">' + data[i].launch_year + ' </span>';
+                p4.innerHTML = '<span class="font-weight-bold">' + 'Successful</br> Launch:' + ' ' + '<span class="text-info float-right">' + data[i].launch_success + ' </span>';
+                p5.innerHTML = '<span class="font-weight-bold">' + 'Successful</br> Landing' + ' ' + '<span class="text-info float-right">' + data[i].launch_landing + ' </span>';
+
+
+
+
+                mainContainer.appendChild(div);
+                div.appendChild(div2);
+                div2.appendChild(dp);
+
+                div2.appendChild(div3);
+                div3.appendChild(p1);
+
+                div3.appendChild(p2);
+                div3.appendChild(p3);
+                div3.appendChild(p4);
+                div3.appendChild(p5);
+
+
+
+
+
+            }
+        }
+        function appendfilter1(data) {
+
+            var f1Container = document.getElementById("filter1");
+
+
+            for (var j = 0; j < data.length; j++) {
+
+                var divf1 = document.createElement("div");
+                divf1.className = "col-6 mb-3";
+                divf1.innerHTML = '<button class="btn btn-success btn-sm" onclick="filterSelection('+data[j].launch_year+')">' + data[j].launch_year + '</button>';
+
+
+                f1Container.appendChild(divf1);
+
+
+            }
+        }
+        function appendfilter2(data) {
+
+            var f2Container = document.getElementById("filter2");
+
+
+            for (var j = 0; j < data.length; j++) {
+
+                var divf2 = document.createElement("div");
+                divf2.className = "col-6 mb-3";
+                divf2.innerHTML = '<button class="btn btn-success btn-sm">' + data[j].launch_success + '</button>';
+
+
+                f2Container.appendChild(divf2);
+
+
+            }
+        }
+
+
+        // FIlter 
+        filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("filterDiv");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("filter1");
+var btns = btnContainer.getElementsByClassName("btn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
+
+    </script>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2 col-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                        <p class="card-text text-center"><u>Launch Year</u></p>
+                        <div class="row" id="filter1">
+
+
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <p class="card-text text-center"><u>Successful Launch</u></p>
+                        <div class="row" id="filter2">
+
+
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-center"><u>Successfull Landing</u></p>
+                        <div class="row">
+
+                            <div class="col-6 mb-3">
+                                <button class="btn btn-success btn-sm">True</button>
+
+                            </div>
+                            <div class="col-6 mb-3">
+                                <button class="btn btn-success btn-sm">False</button>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-10">
+                <div class="row" id="myData">
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>
